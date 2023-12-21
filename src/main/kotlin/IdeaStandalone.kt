@@ -20,7 +20,7 @@ object IdeaStandaloneExecutionSetup {
 
     private fun checkInHeadlessMode() {
         // If `application` is `null` it means that we are in progress of set-up
-        // application environment i.e. we are not in the running IDEA.
+        // application environment, i.e., we are not in the running IDEA.
         val application = ApplicationManager.getApplication() ?: return
         if (!application.isHeadlessEnvironment) {
             LOG.error(Throwable("`${this::class.simpleName}` should be called only in headless environment"))
@@ -28,17 +28,12 @@ object IdeaStandaloneExecutionSetup {
     }
 
     private fun setSystemProperties() {
-        // As in `org.jetbrains.kotlin.cli.common.CLITool.doMain()`.
-
-        // We depend on swing (indirectly through PSI or something), so we want to declare headless mode,
-        // to avoid accidentally starting the UI thread
-        if (System.getProperty("java.awt.headless") == null) {
-            System.setProperty("java.awt.headless", "true")
-        }
+        turnHeadlessIfUndefined()
 
         // As in `org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback()`.
-        System.setProperty("idea.io.use.nio2", java.lang.Boolean.TRUE.toString())
+        System.setProperty("idea.io.use.nio2", "true")
 
+        // As in `org.jetbrains.kotlin.cli.jvm.compiler.compat.kt`.
         System.getProperties().let {
             it["project.structure.add.tools.jar.to.new.jdk"] = "false"
             it["psi.track.invalidation"] = "true"
@@ -52,4 +47,22 @@ object IdeaStandaloneExecutionSetup {
             it["idea.plugins.compatible.build"] = FALLBACK_IDEA_BUILD_NUMBER
         }
     }
+
+    /**
+     * We depend on swing (indirectly through PSI or something), so we want to declare headless mode,
+     * to avoid accidentally starting the UI thread.
+     *
+     * Original code is in `org.jetbrains.kotlin.cli.common.CLITool.doMain()`.
+     */
+    private fun turnHeadlessIfUndefined() {
+        setIfNull("java.awt.headless", "true")
+    }
+
+    @Suppress("SameParameterValue")
+    private fun setIfNull(propertyName: String, value: String) {
+        if (System.getProperty(propertyName) == null) {
+            System.setProperty(propertyName, value)
+        }
+    }
 }
+

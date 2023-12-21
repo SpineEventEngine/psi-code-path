@@ -3,8 +3,8 @@ package io.spine.tools
 import com.intellij.core.JavaCoreProjectEnvironment
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.mock.MockProject
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.fileEditor.FileDocumentManager
-import com.intellij.openapi.project.Project
 import com.intellij.psi.*
 import java.io.IOException
 import java.time.Instant
@@ -55,10 +55,6 @@ object ParserRunner {
 //        System.out.println(translator.getCtx().getText())
     }
 
-    private fun createPsiFactory(project: Project): PsiFileFactory {
-        return PsiFileFactory.getInstance(project)
-    }
-
     private fun parseJavaSource(javaSource: String, psiFileFactory: PsiFileFactory): PsiJavaFile {
         val modificationStamp = Instant.now().toEpochMilli()
         val psiFile =
@@ -85,7 +81,9 @@ private val PsiElement.documentManager: FileDocumentManager
 
 private fun PsiClass.lineNumber(): Int {
     val virtualFile = containingFile.virtualFile
-    checkNotNull(virtualFile)
+    check(virtualFile != null) {
+        "Unable to obtain a virtual file for `${containingFile.name}`."
+    }
     val document = documentManager.getDocument(virtualFile)
     return document?.getLineNumber(textOffset) ?: -1
 }
