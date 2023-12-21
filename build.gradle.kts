@@ -1,4 +1,4 @@
-val kotlinVersion = "1.9.21"
+@file:Suppress("ConstPropertyName")
 
 plugins {
     kotlin("jvm") version "1.9.21"
@@ -13,6 +13,10 @@ repositories {
     mavenCentral()
 }
 
+object Kotlin {
+    const val version = "1.9.21"
+}
+
 val intellijVersion = "213.7172.53"
     // "233.11799.300"
     // "213.7172.53"
@@ -23,9 +27,9 @@ configurations.all {
         cacheChangingModulesFor(0, "seconds")
         force(
             "org.jetbrains.intellij.deps:trove4j:1.0.20181211",
-            "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
-            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
-            "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+            "org.jetbrains.kotlin:kotlin-stdlib:${Kotlin.version}",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Kotlin.version}",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Kotlin.version}",
             "org.jetbrains:annotations:24.0.0",
             "com.jetbrains.intellij.platform:core:$intellijVersion",
             "com.jetbrains.intellij.platform:util:$intellijVersion",
@@ -42,7 +46,7 @@ dependencies {
     implementation("com.jetbrains.intellij.platform:core:$intellijVersion")
     implementation("com.jetbrains.intellij.platform:util:$intellijVersion")
 
-    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
+//    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
 //    testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
