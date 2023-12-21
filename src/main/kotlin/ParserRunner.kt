@@ -16,8 +16,6 @@ object ParserRunner {
     fun main(args: Array<String>) {
         setupIdeaStandaloneExecution()
 
-        //K2JVMCompiler()
-
         val project = createProject()
         val psiFileFactory = PsiFileFactory.getInstance(project)
         //val psiFacade = JavaPsiFacade.getInstance(project)

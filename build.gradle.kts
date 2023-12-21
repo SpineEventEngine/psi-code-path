@@ -13,7 +13,8 @@ repositories {
     mavenCentral()
 }
 
-val intellijVersion = "233.11799.300"
+val intellijVersion = "213.7172.53"
+    // "233.11799.300"
     // "213.7172.53"
 
 configurations.all {
