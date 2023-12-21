@@ -1,2 +1,2 @@
-# psi-base
-Base tooling API for working with IntelliJ PSI
+# psi-code-path
+Experiments with IntelliJ PSI.
