@@ -17,7 +17,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.BasicFileAttributes
 
-class KotlinCompilerCoreJrtFileSystem : DeprecatedVirtualFileSystem() {
+// Original code is in `org.jetbrains.kotlin.cli.jvm.modules.CoreJrtFileSystem`.
+internal class CoreJrtFileSystem : DeprecatedVirtualFileSystem() {
     private val roots =
         ConcurrentFactoryMap.createMap<String, CoreJrtVirtualFile?> { jdkHomePath ->
             val fileSystem = globalJrtFsCache[jdkHomePath] ?: return@createMap null
@@ -84,8 +85,8 @@ class KotlinCompilerCoreJrtFileSystem : DeprecatedVirtualFileSystem() {
     }
 }
 
-internal class CoreJrtVirtualFile(
-    private val virtualFileSystem: KotlinCompilerCoreJrtFileSystem,
+private class CoreJrtVirtualFile(
+    private val virtualFileSystem: CoreJrtFileSystem,
     private val jdkHomePath: String,
     private val path: Path,
     private val parent: CoreJrtVirtualFile?,

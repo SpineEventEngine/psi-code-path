@@ -1,8 +1,5 @@
 package io.spine.tools
 
-//import org.jetbrains.kotlin.cli.jvm.compiler.DummyJavaFileCodeStyleFacadeFactory
-//import org.jetbrains.kotlin.cli.jvm.compiler.jarfs.FastJarFileSystem
-//import org.jetbrains.kotlin.cli.jvm.modules.CoreJrtFileSystem
 import com.intellij.DynamicBundle.LanguageBundleEP
 import com.intellij.codeInsight.ContainerProvider
 import com.intellij.codeInsight.runner.JavaMainMethodProvider
@@ -11,7 +8,6 @@ import com.intellij.core.JavaCoreApplicationEnvironment
 import com.intellij.ide.highlighter.JavaClassFileType
 import com.intellij.lang.MetaLanguage
 import com.intellij.lang.jvm.facade.JvmElementProvider
-import com.intellij.mock.MockApplication
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.extensions.ExtensionPointName
@@ -25,7 +21,7 @@ import com.intellij.psi.impl.smartPointers.SmartPointerAnchorProvider
 import com.intellij.psi.meta.MetaDataContributor
 import io.spine.tools.IdeaExtensionPoints.registerVersionSpecificAppExtensionPoints
 
-class ProtoDataJavaAppEnvironment private constructor(
+class PsiJavaAppEnvironment private constructor(
     parentDisposable: Disposable
 ) : JavaCoreApplicationEnvironment(parentDisposable, false) {
 
@@ -35,48 +31,13 @@ class ProtoDataJavaAppEnvironment private constructor(
     }
 
     override fun createJrtFileSystem(): VirtualFileSystem {
-        return KotlinCompilerCoreJrtFileSystem()
-//        return CoreJrtFileSystem()
+        return CoreJrtFileSystem()
     }
-
-    override fun createApplication(parentDisposable: Disposable): MockApplication {
-        val mock = super.createApplication(parentDisposable)
-        return mock
-    }
-
-//    private var fastJarFileSystemField: FastJarFileSystem? = null
-//    private var fastJarFileSystemFieldInitialized = false
-//
-//    val fastJarFileSystem: FastJarFileSystem?
-//        get() {
-//            synchronized(APPLICATION_LOCK) {
-//                if (!fastJarFileSystemFieldInitialized) {
-//
-//                    // may return null e.g. on the old JDKs, therefore fastJarFileSystemFieldInitialized flag is needed
-//                    fastJarFileSystemField = FastJarFileSystem.createIfUnmappingPossible()?.also {
-//                        Disposer.register(parentDisposable) {
-//                            it.clearHandlersCache()
-//                        }
-//                    }
-//                    fastJarFileSystemFieldInitialized = true
-//                }
-//                return fastJarFileSystemField
-//            }
-//        }
-//
-//    fun idleCleanup() {
-//        fastJarFileSystemField?.clearHandlersCache()
-//    }
 
     companion object {
 
-        @PublishedApi
-        internal val APPLICATION_LOCK = Object()
-
-        fun create(
-            parentDisposable: Disposable
-        ): ProtoDataJavaAppEnvironment {
-            val environment = ProtoDataJavaAppEnvironment(parentDisposable)
+        fun create(parentDisposable: Disposable): PsiJavaAppEnvironment {
+            val environment = PsiJavaAppEnvironment(parentDisposable)
             registerExtensionPoints()
             return environment
         }

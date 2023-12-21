@@ -3,7 +3,6 @@ package io.spine.tools
 import com.intellij.core.JavaCoreProjectEnvironment
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.mock.MockProject
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.psi.*
 import java.io.IOException
@@ -68,7 +67,7 @@ object ParserRunner {
     }
 
     private fun createProject(): MockProject {
-        val appEnvironment = ProtoDataJavaAppEnvironment.create({ })
+        val appEnvironment = PsiJavaAppEnvironment.create({ })
         val environment = JavaCoreProjectEnvironment({ }, appEnvironment)
 
         val project = environment.project
